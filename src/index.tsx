@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  FileTextOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons'
 import './style.css'
 
@@ -27,7 +27,7 @@ const Plugin: IPlugin = {
             {
               name: 'Social Feed',
               path: '/social-feed',
-              icon: <FileTextOutlined />,
+              icon: <UnorderedListOutlined />,
             },
           ],
           hasCss: true,

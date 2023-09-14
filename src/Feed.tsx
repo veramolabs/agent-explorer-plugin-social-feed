@@ -3,15 +3,14 @@ import { formatRelative } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { useVeramo } from '@veramo-community/veramo-react'
-import { PageContainer, ProList } from '@ant-design/pro-components'
-import { IDataStoreORM, UniqueVerifiableCredential } from '@veramo/core'
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
-import IdentifierProfile from './components/IdentifierProfile'
-import { getIssuerDID } from './utils/did'
-import CredentialActionsDropdown from './components/CredentialActionsDropdown'
-import { App, Button, Drawer } from 'antd'
+import { PageContainer } from '@ant-design/pro-components'
+import { IDataStoreORM } from '@veramo/core'
+import { App, Drawer, List } from 'antd'
 import { PostForm } from './PostForm.js'
-import { MarkDown } from './MarkDown'
+import { ComposeSocialPostingForm, ComposeSocialPostingFormValues } from './ComposeSocialPostingForm'
+import uuid from 'uuid';
+import { SocialPosting } from './SocialPosting'
+
 
 export const Feed = () => {
   const { notification } = App.useApp()
@@ -27,6 +26,41 @@ export const Feed = () => {
       }),
   )
 
+  const handleNewSocialPosting = async (values: ComposeSocialPostingFormValues) => {
+    const issuerProfile = await agent?.getIdentifierProfile({ did: values.issuer })
+    const credentialId = uuid.v4()
+    const credential = await agent?.createVerifiableCredential({
+      save: true,
+      proofFormat: 'jwt',
+      credential: {
+        '@context': ['https://www.w3.org/2018/credentials/v1'],
+        type: ['VerifiableCredential', 'VerifiableSocialPosting'],
+        issuer: { id: values.issuer },
+        issuanceDate: new Date().toISOString(),
+        credentialSubject: {
+          id: credentialId,
+          type: "SocialMediaPosting",
+          author: {
+            id: values.issuer,
+            image: issuerProfile?.picture,
+            name: issuerProfile?.name,
+          },
+          headline: "",
+          articleBody: values.articleBody,
+        },
+      },
+    })
+
+    if (credential) {
+      await agent?.dataStoreSaveVerifiableCredential({verifiableCredential: credential})
+      notification.success({
+        message: 'Kudos sent',
+      })
+      refetch()
+      
+    }
+  }
+
   const handleNewPost = async (hash: string) => {
     notification.success({
       message: 'Post created'
@@ -37,65 +71,26 @@ export const Feed = () => {
 
 
   return (
-    <PageContainer
-    extra={[
-      <Button
-        key={'add'}
-        icon={<PlusOutlined />}
-        type="primary"
-        title="Compose new post"
-        onClick={() => setDrawerOpen(true)}
-      >Compose</Button>,
-    ]}
-    >
-      <ProList
-        ghost
-        loading={isLoading}
-        pagination={{
-          defaultPageSize: 5,
-          showSizeChanger: true,
-        }}
-        grid={{ column: 1, lg: 1, xxl: 1, xl: 1 }}
-        onItem={(record: any) => {
-          return {
-            onClick: () => {
-              navigate('/social-feed/' + record.hash)
-            },
-          }
-        }}
-        metas={{
-          title: {},
-          content: {},
-          actions: {
-            cardActionProps: 'extra',
-          },
-        }}
-        dataSource={credentials?.map((item: UniqueVerifiableCredential) => {
-          return {
-            title: (
-              <IdentifierProfile
-                did={getIssuerDID(item.verifiableCredential)}
-              />
-            ),
-            actions: [
-              <div>
-                {formatRelative(
-                  new Date(item.verifiableCredential.issuanceDate),
-                  new Date(),
-                )}
-              </div>,
-              <CredentialActionsDropdown credential={item.verifiableCredential}>
-                <EllipsisOutlined />
-              </CredentialActionsDropdown>,
-            ],
-            content: (
-              <MarkDown content={item.verifiableCredential.credentialSubject.articleBody}/>
-            ),
-            hash: item.hash,
-          }
-        })}
+    <PageContainer>
+      <ComposeSocialPostingForm
+        onNewSocialPosting={handleNewSocialPosting}
       />
-    <>
+
+      <List
+        itemLayout="vertical"
+        size="large"
+        pagination={{
+          pageSize: 30,
+        }}
+        dataSource={credentials}
+        renderItem={(item) => (
+          <SocialPosting
+            key={item.hash}
+            credential={item}
+          />
+        )}
+      />
+
       <Drawer 
         title="Compose new post"
         placement="right"
@@ -106,7 +101,6 @@ export const Feed = () => {
       >
         <PostForm onOk={handleNewPost}/>
       </Drawer>
-    </>
     </PageContainer>
   )
 }

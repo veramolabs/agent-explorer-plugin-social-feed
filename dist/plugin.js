@@ -468,13 +468,6 @@ var require_lodash = __commonJS({
   }
 });
 
-// external-global-plugin:date-fns
-var require_date_fns = __commonJS({
-  "external-global-plugin:date-fns"(exports2, module2) {
-    module2.exports = window.datefns;
-  }
-});
-
 // external-global-plugin:react-router-dom
 var require_react_router_dom = __commonJS({
   "external-global-plugin:react-router-dom"(exports2, module2) {
@@ -60941,10 +60934,739 @@ var require_xchacha20poly1305 = __commonJS({
   }
 });
 
+// external-global-plugin:date-fns
+var require_date_fns = __commonJS({
+  "external-global-plugin:date-fns"(exports2, module2) {
+    module2.exports = window.datefns;
+  }
+});
+
 // external-global-plugin:uuid
 var require_uuid = __commonJS({
   "external-global-plugin:uuid"(exports2, module2) {
     module2.exports = window.uuid;
+  }
+});
+
+// node_modules/.pnpm/lodash.merge@4.6.2/node_modules/lodash.merge/index.js
+var require_lodash2 = __commonJS({
+  "node_modules/.pnpm/lodash.merge@4.6.2/node_modules/lodash.merge/index.js"(exports2, module2) {
+    var LARGE_ARRAY_SIZE = 200;
+    var HASH_UNDEFINED = "__lodash_hash_undefined__";
+    var HOT_COUNT = 800;
+    var HOT_SPAN = 16;
+    var MAX_SAFE_INTEGER = 9007199254740991;
+    var argsTag = "[object Arguments]";
+    var arrayTag = "[object Array]";
+    var asyncTag = "[object AsyncFunction]";
+    var boolTag = "[object Boolean]";
+    var dateTag = "[object Date]";
+    var errorTag = "[object Error]";
+    var funcTag = "[object Function]";
+    var genTag = "[object GeneratorFunction]";
+    var mapTag = "[object Map]";
+    var numberTag = "[object Number]";
+    var nullTag = "[object Null]";
+    var objectTag = "[object Object]";
+    var proxyTag = "[object Proxy]";
+    var regexpTag = "[object RegExp]";
+    var setTag = "[object Set]";
+    var stringTag = "[object String]";
+    var undefinedTag = "[object Undefined]";
+    var weakMapTag = "[object WeakMap]";
+    var arrayBufferTag = "[object ArrayBuffer]";
+    var dataViewTag = "[object DataView]";
+    var float32Tag = "[object Float32Array]";
+    var float64Tag = "[object Float64Array]";
+    var int8Tag = "[object Int8Array]";
+    var int16Tag = "[object Int16Array]";
+    var int32Tag = "[object Int32Array]";
+    var uint8Tag = "[object Uint8Array]";
+    var uint8ClampedTag = "[object Uint8ClampedArray]";
+    var uint16Tag = "[object Uint16Array]";
+    var uint32Tag = "[object Uint32Array]";
+    var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+    var reIsHostCtor = /^\[object .+?Constructor\]$/;
+    var reIsUint = /^(?:0|[1-9]\d*)$/;
+    var typedArrayTags = {};
+    typedArrayTags[float32Tag] = typedArrayTags[float64Tag] = typedArrayTags[int8Tag] = typedArrayTags[int16Tag] = typedArrayTags[int32Tag] = typedArrayTags[uint8Tag] = typedArrayTags[uint8ClampedTag] = typedArrayTags[uint16Tag] = typedArrayTags[uint32Tag] = true;
+    typedArrayTags[argsTag] = typedArrayTags[arrayTag] = typedArrayTags[arrayBufferTag] = typedArrayTags[boolTag] = typedArrayTags[dataViewTag] = typedArrayTags[dateTag] = typedArrayTags[errorTag] = typedArrayTags[funcTag] = typedArrayTags[mapTag] = typedArrayTags[numberTag] = typedArrayTags[objectTag] = typedArrayTags[regexpTag] = typedArrayTags[setTag] = typedArrayTags[stringTag] = typedArrayTags[weakMapTag] = false;
+    var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
+    var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+    var root = freeGlobal || freeSelf || Function("return this")();
+    var freeExports = typeof exports2 == "object" && exports2 && !exports2.nodeType && exports2;
+    var freeModule = freeExports && typeof module2 == "object" && module2 && !module2.nodeType && module2;
+    var moduleExports = freeModule && freeModule.exports === freeExports;
+    var freeProcess = moduleExports && freeGlobal.process;
+    var nodeUtil = function() {
+      try {
+        var types = freeModule && freeModule.require && freeModule.require("util").types;
+        if (types) {
+          return types;
+        }
+        return freeProcess && freeProcess.binding && freeProcess.binding("util");
+      } catch (e) {
+      }
+    }();
+    var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+    function apply(func, thisArg, args) {
+      switch (args.length) {
+        case 0:
+          return func.call(thisArg);
+        case 1:
+          return func.call(thisArg, args[0]);
+        case 2:
+          return func.call(thisArg, args[0], args[1]);
+        case 3:
+          return func.call(thisArg, args[0], args[1], args[2]);
+      }
+      return func.apply(thisArg, args);
+    }
+    function baseTimes(n, iteratee) {
+      var index2 = -1, result = Array(n);
+      while (++index2 < n) {
+        result[index2] = iteratee(index2);
+      }
+      return result;
+    }
+    function baseUnary(func) {
+      return function(value) {
+        return func(value);
+      };
+    }
+    function getValue2(object, key) {
+      return object == null ? void 0 : object[key];
+    }
+    function overArg(func, transform) {
+      return function(arg) {
+        return func(transform(arg));
+      };
+    }
+    var arrayProto = Array.prototype;
+    var funcProto = Function.prototype;
+    var objectProto = Object.prototype;
+    var coreJsData = root["__core-js_shared__"];
+    var funcToString = funcProto.toString;
+    var hasOwnProperty2 = objectProto.hasOwnProperty;
+    var maskSrcKey = function() {
+      var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
+      return uid ? "Symbol(src)_1." + uid : "";
+    }();
+    var nativeObjectToString = objectProto.toString;
+    var objectCtorString = funcToString.call(Object);
+    var reIsNative = RegExp(
+      "^" + funcToString.call(hasOwnProperty2).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$"
+    );
+    var Buffer2 = moduleExports ? root.Buffer : void 0;
+    var Symbol2 = root.Symbol;
+    var Uint8Array2 = root.Uint8Array;
+    var allocUnsafe2 = Buffer2 ? Buffer2.allocUnsafe : void 0;
+    var getPrototype = overArg(Object.getPrototypeOf, Object);
+    var objectCreate = Object.create;
+    var propertyIsEnumerable = objectProto.propertyIsEnumerable;
+    var splice = arrayProto.splice;
+    var symToStringTag = Symbol2 ? Symbol2.toStringTag : void 0;
+    var defineProperty = function() {
+      try {
+        var func = getNative(Object, "defineProperty");
+        func({}, "", {});
+        return func;
+      } catch (e) {
+      }
+    }();
+    var nativeIsBuffer = Buffer2 ? Buffer2.isBuffer : void 0;
+    var nativeMax = Math.max;
+    var nativeNow = Date.now;
+    var Map2 = getNative(root, "Map");
+    var nativeCreate = getNative(Object, "create");
+    var baseCreate = function() {
+      function object() {
+      }
+      return function(proto) {
+        if (!isObject3(proto)) {
+          return {};
+        }
+        if (objectCreate) {
+          return objectCreate(proto);
+        }
+        object.prototype = proto;
+        var result = new object();
+        object.prototype = void 0;
+        return result;
+      };
+    }();
+    function Hash2(entries) {
+      var index2 = -1, length2 = entries == null ? 0 : entries.length;
+      this.clear();
+      while (++index2 < length2) {
+        var entry = entries[index2];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function hashClear() {
+      this.__data__ = nativeCreate ? nativeCreate(null) : {};
+      this.size = 0;
+    }
+    function hashDelete(key) {
+      var result = this.has(key) && delete this.__data__[key];
+      this.size -= result ? 1 : 0;
+      return result;
+    }
+    function hashGet(key) {
+      var data = this.__data__;
+      if (nativeCreate) {
+        var result = data[key];
+        return result === HASH_UNDEFINED ? void 0 : result;
+      }
+      return hasOwnProperty2.call(data, key) ? data[key] : void 0;
+    }
+    function hashHas(key) {
+      var data = this.__data__;
+      return nativeCreate ? data[key] !== void 0 : hasOwnProperty2.call(data, key);
+    }
+    function hashSet(key, value) {
+      var data = this.__data__;
+      this.size += this.has(key) ? 0 : 1;
+      data[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
+      return this;
+    }
+    Hash2.prototype.clear = hashClear;
+    Hash2.prototype["delete"] = hashDelete;
+    Hash2.prototype.get = hashGet;
+    Hash2.prototype.has = hashHas;
+    Hash2.prototype.set = hashSet;
+    function ListCache(entries) {
+      var index2 = -1, length2 = entries == null ? 0 : entries.length;
+      this.clear();
+      while (++index2 < length2) {
+        var entry = entries[index2];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function listCacheClear() {
+      this.__data__ = [];
+      this.size = 0;
+    }
+    function listCacheDelete(key) {
+      var data = this.__data__, index2 = assocIndexOf(data, key);
+      if (index2 < 0) {
+        return false;
+      }
+      var lastIndex = data.length - 1;
+      if (index2 == lastIndex) {
+        data.pop();
+      } else {
+        splice.call(data, index2, 1);
+      }
+      --this.size;
+      return true;
+    }
+    function listCacheGet(key) {
+      var data = this.__data__, index2 = assocIndexOf(data, key);
+      return index2 < 0 ? void 0 : data[index2][1];
+    }
+    function listCacheHas(key) {
+      return assocIndexOf(this.__data__, key) > -1;
+    }
+    function listCacheSet(key, value) {
+      var data = this.__data__, index2 = assocIndexOf(data, key);
+      if (index2 < 0) {
+        ++this.size;
+        data.push([key, value]);
+      } else {
+        data[index2][1] = value;
+      }
+      return this;
+    }
+    ListCache.prototype.clear = listCacheClear;
+    ListCache.prototype["delete"] = listCacheDelete;
+    ListCache.prototype.get = listCacheGet;
+    ListCache.prototype.has = listCacheHas;
+    ListCache.prototype.set = listCacheSet;
+    function MapCache(entries) {
+      var index2 = -1, length2 = entries == null ? 0 : entries.length;
+      this.clear();
+      while (++index2 < length2) {
+        var entry = entries[index2];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function mapCacheClear() {
+      this.size = 0;
+      this.__data__ = {
+        "hash": new Hash2(),
+        "map": new (Map2 || ListCache)(),
+        "string": new Hash2()
+      };
+    }
+    function mapCacheDelete(key) {
+      var result = getMapData(this, key)["delete"](key);
+      this.size -= result ? 1 : 0;
+      return result;
+    }
+    function mapCacheGet(key) {
+      return getMapData(this, key).get(key);
+    }
+    function mapCacheHas(key) {
+      return getMapData(this, key).has(key);
+    }
+    function mapCacheSet(key, value) {
+      var data = getMapData(this, key), size = data.size;
+      data.set(key, value);
+      this.size += data.size == size ? 0 : 1;
+      return this;
+    }
+    MapCache.prototype.clear = mapCacheClear;
+    MapCache.prototype["delete"] = mapCacheDelete;
+    MapCache.prototype.get = mapCacheGet;
+    MapCache.prototype.has = mapCacheHas;
+    MapCache.prototype.set = mapCacheSet;
+    function Stack(entries) {
+      var data = this.__data__ = new ListCache(entries);
+      this.size = data.size;
+    }
+    function stackClear() {
+      this.__data__ = new ListCache();
+      this.size = 0;
+    }
+    function stackDelete(key) {
+      var data = this.__data__, result = data["delete"](key);
+      this.size = data.size;
+      return result;
+    }
+    function stackGet(key) {
+      return this.__data__.get(key);
+    }
+    function stackHas(key) {
+      return this.__data__.has(key);
+    }
+    function stackSet(key, value) {
+      var data = this.__data__;
+      if (data instanceof ListCache) {
+        var pairs = data.__data__;
+        if (!Map2 || pairs.length < LARGE_ARRAY_SIZE - 1) {
+          pairs.push([key, value]);
+          this.size = ++data.size;
+          return this;
+        }
+        data = this.__data__ = new MapCache(pairs);
+      }
+      data.set(key, value);
+      this.size = data.size;
+      return this;
+    }
+    Stack.prototype.clear = stackClear;
+    Stack.prototype["delete"] = stackDelete;
+    Stack.prototype.get = stackGet;
+    Stack.prototype.has = stackHas;
+    Stack.prototype.set = stackSet;
+    function arrayLikeKeys(value, inherited) {
+      var isArr = isArray(value), isArg = !isArr && isArguments(value), isBuff = !isArr && !isArg && isBuffer(value), isType = !isArr && !isArg && !isBuff && isTypedArray(value), skipIndexes = isArr || isArg || isBuff || isType, result = skipIndexes ? baseTimes(value.length, String) : [], length2 = result.length;
+      for (var key in value) {
+        if ((inherited || hasOwnProperty2.call(value, key)) && !(skipIndexes && // Safari 9 has enumerable `arguments.length` in strict mode.
+        (key == "length" || // Node.js 0.10 has enumerable non-index properties on buffers.
+        isBuff && (key == "offset" || key == "parent") || // PhantomJS 2 has enumerable non-index properties on typed arrays.
+        isType && (key == "buffer" || key == "byteLength" || key == "byteOffset") || // Skip index properties.
+        isIndex(key, length2)))) {
+          result.push(key);
+        }
+      }
+      return result;
+    }
+    function assignMergeValue(object, key, value) {
+      if (value !== void 0 && !eq(object[key], value) || value === void 0 && !(key in object)) {
+        baseAssignValue(object, key, value);
+      }
+    }
+    function assignValue(object, key, value) {
+      var objValue = object[key];
+      if (!(hasOwnProperty2.call(object, key) && eq(objValue, value)) || value === void 0 && !(key in object)) {
+        baseAssignValue(object, key, value);
+      }
+    }
+    function assocIndexOf(array, key) {
+      var length2 = array.length;
+      while (length2--) {
+        if (eq(array[length2][0], key)) {
+          return length2;
+        }
+      }
+      return -1;
+    }
+    function baseAssignValue(object, key, value) {
+      if (key == "__proto__" && defineProperty) {
+        defineProperty(object, key, {
+          "configurable": true,
+          "enumerable": true,
+          "value": value,
+          "writable": true
+        });
+      } else {
+        object[key] = value;
+      }
+    }
+    var baseFor = createBaseFor();
+    function baseGetTag(value) {
+      if (value == null) {
+        return value === void 0 ? undefinedTag : nullTag;
+      }
+      return symToStringTag && symToStringTag in Object(value) ? getRawTag(value) : objectToString(value);
+    }
+    function baseIsArguments(value) {
+      return isObjectLike(value) && baseGetTag(value) == argsTag;
+    }
+    function baseIsNative(value) {
+      if (!isObject3(value) || isMasked(value)) {
+        return false;
+      }
+      var pattern = isFunction2(value) ? reIsNative : reIsHostCtor;
+      return pattern.test(toSource(value));
+    }
+    function baseIsTypedArray(value) {
+      return isObjectLike(value) && isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+    }
+    function baseKeysIn(object) {
+      if (!isObject3(object)) {
+        return nativeKeysIn(object);
+      }
+      var isProto = isPrototype(object), result = [];
+      for (var key in object) {
+        if (!(key == "constructor" && (isProto || !hasOwnProperty2.call(object, key)))) {
+          result.push(key);
+        }
+      }
+      return result;
+    }
+    function baseMerge(object, source, srcIndex, customizer, stack) {
+      if (object === source) {
+        return;
+      }
+      baseFor(source, function(srcValue, key) {
+        stack || (stack = new Stack());
+        if (isObject3(srcValue)) {
+          baseMergeDeep(object, source, key, srcIndex, baseMerge, customizer, stack);
+        } else {
+          var newValue = customizer ? customizer(safeGet(object, key), srcValue, key + "", object, source, stack) : void 0;
+          if (newValue === void 0) {
+            newValue = srcValue;
+          }
+          assignMergeValue(object, key, newValue);
+        }
+      }, keysIn);
+    }
+    function baseMergeDeep(object, source, key, srcIndex, mergeFunc, customizer, stack) {
+      var objValue = safeGet(object, key), srcValue = safeGet(source, key), stacked = stack.get(srcValue);
+      if (stacked) {
+        assignMergeValue(object, key, stacked);
+        return;
+      }
+      var newValue = customizer ? customizer(objValue, srcValue, key + "", object, source, stack) : void 0;
+      var isCommon = newValue === void 0;
+      if (isCommon) {
+        var isArr = isArray(srcValue), isBuff = !isArr && isBuffer(srcValue), isTyped = !isArr && !isBuff && isTypedArray(srcValue);
+        newValue = srcValue;
+        if (isArr || isBuff || isTyped) {
+          if (isArray(objValue)) {
+            newValue = objValue;
+          } else if (isArrayLikeObject(objValue)) {
+            newValue = copyArray(objValue);
+          } else if (isBuff) {
+            isCommon = false;
+            newValue = cloneBuffer(srcValue, true);
+          } else if (isTyped) {
+            isCommon = false;
+            newValue = cloneTypedArray(srcValue, true);
+          } else {
+            newValue = [];
+          }
+        } else if (isPlainObject(srcValue) || isArguments(srcValue)) {
+          newValue = objValue;
+          if (isArguments(objValue)) {
+            newValue = toPlainObject(objValue);
+          } else if (!isObject3(objValue) || isFunction2(objValue)) {
+            newValue = initCloneObject(srcValue);
+          }
+        } else {
+          isCommon = false;
+        }
+      }
+      if (isCommon) {
+        stack.set(srcValue, newValue);
+        mergeFunc(newValue, srcValue, srcIndex, customizer, stack);
+        stack["delete"](srcValue);
+      }
+      assignMergeValue(object, key, newValue);
+    }
+    function baseRest(func, start) {
+      return setToString(overRest(func, start, identity3), func + "");
+    }
+    var baseSetToString = !defineProperty ? identity3 : function(func, string2) {
+      return defineProperty(func, "toString", {
+        "configurable": true,
+        "enumerable": false,
+        "value": constant(string2),
+        "writable": true
+      });
+    };
+    function cloneBuffer(buffer, isDeep) {
+      if (isDeep) {
+        return buffer.slice();
+      }
+      var length2 = buffer.length, result = allocUnsafe2 ? allocUnsafe2(length2) : new buffer.constructor(length2);
+      buffer.copy(result);
+      return result;
+    }
+    function cloneArrayBuffer(arrayBuffer) {
+      var result = new arrayBuffer.constructor(arrayBuffer.byteLength);
+      new Uint8Array2(result).set(new Uint8Array2(arrayBuffer));
+      return result;
+    }
+    function cloneTypedArray(typedArray, isDeep) {
+      var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
+      return new typedArray.constructor(buffer, typedArray.byteOffset, typedArray.length);
+    }
+    function copyArray(source, array) {
+      var index2 = -1, length2 = source.length;
+      array || (array = Array(length2));
+      while (++index2 < length2) {
+        array[index2] = source[index2];
+      }
+      return array;
+    }
+    function copyObject(source, props, object, customizer) {
+      var isNew = !object;
+      object || (object = {});
+      var index2 = -1, length2 = props.length;
+      while (++index2 < length2) {
+        var key = props[index2];
+        var newValue = customizer ? customizer(object[key], source[key], key, object, source) : void 0;
+        if (newValue === void 0) {
+          newValue = source[key];
+        }
+        if (isNew) {
+          baseAssignValue(object, key, newValue);
+        } else {
+          assignValue(object, key, newValue);
+        }
+      }
+      return object;
+    }
+    function createAssigner(assigner) {
+      return baseRest(function(object, sources) {
+        var index2 = -1, length2 = sources.length, customizer = length2 > 1 ? sources[length2 - 1] : void 0, guard = length2 > 2 ? sources[2] : void 0;
+        customizer = assigner.length > 3 && typeof customizer == "function" ? (length2--, customizer) : void 0;
+        if (guard && isIterateeCall(sources[0], sources[1], guard)) {
+          customizer = length2 < 3 ? void 0 : customizer;
+          length2 = 1;
+        }
+        object = Object(object);
+        while (++index2 < length2) {
+          var source = sources[index2];
+          if (source) {
+            assigner(object, source, index2, customizer);
+          }
+        }
+        return object;
+      });
+    }
+    function createBaseFor(fromRight) {
+      return function(object, iteratee, keysFunc) {
+        var index2 = -1, iterable = Object(object), props = keysFunc(object), length2 = props.length;
+        while (length2--) {
+          var key = props[fromRight ? length2 : ++index2];
+          if (iteratee(iterable[key], key, iterable) === false) {
+            break;
+          }
+        }
+        return object;
+      };
+    }
+    function getMapData(map, key) {
+      var data = map.__data__;
+      return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
+    }
+    function getNative(object, key) {
+      var value = getValue2(object, key);
+      return baseIsNative(value) ? value : void 0;
+    }
+    function getRawTag(value) {
+      var isOwn = hasOwnProperty2.call(value, symToStringTag), tag = value[symToStringTag];
+      try {
+        value[symToStringTag] = void 0;
+        var unmasked = true;
+      } catch (e) {
+      }
+      var result = nativeObjectToString.call(value);
+      if (unmasked) {
+        if (isOwn) {
+          value[symToStringTag] = tag;
+        } else {
+          delete value[symToStringTag];
+        }
+      }
+      return result;
+    }
+    function initCloneObject(object) {
+      return typeof object.constructor == "function" && !isPrototype(object) ? baseCreate(getPrototype(object)) : {};
+    }
+    function isIndex(value, length2) {
+      var type = typeof value;
+      length2 = length2 == null ? MAX_SAFE_INTEGER : length2;
+      return !!length2 && (type == "number" || type != "symbol" && reIsUint.test(value)) && (value > -1 && value % 1 == 0 && value < length2);
+    }
+    function isIterateeCall(value, index2, object) {
+      if (!isObject3(object)) {
+        return false;
+      }
+      var type = typeof index2;
+      if (type == "number" ? isArrayLike(object) && isIndex(index2, object.length) : type == "string" && index2 in object) {
+        return eq(object[index2], value);
+      }
+      return false;
+    }
+    function isKeyable(value) {
+      var type = typeof value;
+      return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
+    }
+    function isMasked(func) {
+      return !!maskSrcKey && maskSrcKey in func;
+    }
+    function isPrototype(value) {
+      var Ctor = value && value.constructor, proto = typeof Ctor == "function" && Ctor.prototype || objectProto;
+      return value === proto;
+    }
+    function nativeKeysIn(object) {
+      var result = [];
+      if (object != null) {
+        for (var key in Object(object)) {
+          result.push(key);
+        }
+      }
+      return result;
+    }
+    function objectToString(value) {
+      return nativeObjectToString.call(value);
+    }
+    function overRest(func, start, transform) {
+      start = nativeMax(start === void 0 ? func.length - 1 : start, 0);
+      return function() {
+        var args = arguments, index2 = -1, length2 = nativeMax(args.length - start, 0), array = Array(length2);
+        while (++index2 < length2) {
+          array[index2] = args[start + index2];
+        }
+        index2 = -1;
+        var otherArgs = Array(start + 1);
+        while (++index2 < start) {
+          otherArgs[index2] = args[index2];
+        }
+        otherArgs[start] = transform(array);
+        return apply(func, this, otherArgs);
+      };
+    }
+    function safeGet(object, key) {
+      if (key === "constructor" && typeof object[key] === "function") {
+        return;
+      }
+      if (key == "__proto__") {
+        return;
+      }
+      return object[key];
+    }
+    var setToString = shortOut(baseSetToString);
+    function shortOut(func) {
+      var count = 0, lastCalled = 0;
+      return function() {
+        var stamp = nativeNow(), remaining = HOT_SPAN - (stamp - lastCalled);
+        lastCalled = stamp;
+        if (remaining > 0) {
+          if (++count >= HOT_COUNT) {
+            return arguments[0];
+          }
+        } else {
+          count = 0;
+        }
+        return func.apply(void 0, arguments);
+      };
+    }
+    function toSource(func) {
+      if (func != null) {
+        try {
+          return funcToString.call(func);
+        } catch (e) {
+        }
+        try {
+          return func + "";
+        } catch (e) {
+        }
+      }
+      return "";
+    }
+    function eq(value, other) {
+      return value === other || value !== value && other !== other;
+    }
+    var isArguments = baseIsArguments(function() {
+      return arguments;
+    }()) ? baseIsArguments : function(value) {
+      return isObjectLike(value) && hasOwnProperty2.call(value, "callee") && !propertyIsEnumerable.call(value, "callee");
+    };
+    var isArray = Array.isArray;
+    function isArrayLike(value) {
+      return value != null && isLength(value.length) && !isFunction2(value);
+    }
+    function isArrayLikeObject(value) {
+      return isObjectLike(value) && isArrayLike(value);
+    }
+    var isBuffer = nativeIsBuffer || stubFalse;
+    function isFunction2(value) {
+      if (!isObject3(value)) {
+        return false;
+      }
+      var tag = baseGetTag(value);
+      return tag == funcTag || tag == genTag || tag == asyncTag || tag == proxyTag;
+    }
+    function isLength(value) {
+      return typeof value == "number" && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+    }
+    function isObject3(value) {
+      var type = typeof value;
+      return value != null && (type == "object" || type == "function");
+    }
+    function isObjectLike(value) {
+      return value != null && typeof value == "object";
+    }
+    function isPlainObject(value) {
+      if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
+        return false;
+      }
+      var proto = getPrototype(value);
+      if (proto === null) {
+        return true;
+      }
+      var Ctor = hasOwnProperty2.call(proto, "constructor") && proto.constructor;
+      return typeof Ctor == "function" && Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString;
+    }
+    var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+    function toPlainObject(value) {
+      return copyObject(value, keysIn(value));
+    }
+    function keysIn(object) {
+      return isArrayLike(object) ? arrayLikeKeys(object, true) : baseKeysIn(object);
+    }
+    var merge3 = createAssigner(function(object, source, srcIndex) {
+      baseMerge(object, source, srcIndex);
+    });
+    function constant(value) {
+      return function() {
+        return value;
+      };
+    }
+    function identity3(value) {
+      return value;
+    }
+    function stubFalse() {
+      return false;
+    }
+    module2.exports = merge3;
   }
 });
 
@@ -62181,27 +62903,8 @@ if (true) {
 }
 var EllipsisOutlined_default2 = /* @__PURE__ */ React5.forwardRef(EllipsisOutlined2);
 
-// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/FileTextOutlined.js
-var React6 = __toESM(require_react());
-
-// node_modules/.pnpm/@ant-design+icons-svg@4.3.1/node_modules/@ant-design/icons-svg/es/asn/FileTextOutlined.js
-var FileTextOutlined = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M854.6 288.6L639.4 73.4c-6-6-14.1-9.4-22.6-9.4H192c-17.7 0-32 14.3-32 32v832c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V311.3c0-8.5-3.4-16.7-9.4-22.7zM790.2 326H602V137.8L790.2 326zm1.8 562H232V136h302v216a42 42 0 0042 42h216v494zM504 618H320c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h184c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8zM312 490v48c0 4.4 3.6 8 8 8h384c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H320c-4.4 0-8 3.6-8 8z" } }] }, "name": "file-text", "theme": "outlined" };
-var FileTextOutlined_default = FileTextOutlined;
-
-// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/FileTextOutlined.js
-var FileTextOutlined2 = function FileTextOutlined3(props, ref) {
-  return /* @__PURE__ */ React6.createElement(AntdIcon_default, _extends({}, props, {
-    ref,
-    icon: FileTextOutlined_default
-  }));
-};
-if (true) {
-  FileTextOutlined2.displayName = "FileTextOutlined";
-}
-var FileTextOutlined_default2 = /* @__PURE__ */ React6.forwardRef(FileTextOutlined2);
-
 // node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/InfoCircleOutlined.js
-var React7 = __toESM(require_react());
+var React6 = __toESM(require_react());
 
 // node_modules/.pnpm/@ant-design+icons-svg@4.3.1/node_modules/@ant-design/icons-svg/es/asn/InfoCircleOutlined.js
 var InfoCircleOutlined = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" } }, { "tag": "path", "attrs": { "d": "M464 336a48 48 0 1096 0 48 48 0 10-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z" } }] }, "name": "info-circle", "theme": "outlined" };
@@ -62209,7 +62912,7 @@ var InfoCircleOutlined_default = InfoCircleOutlined;
 
 // node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/InfoCircleOutlined.js
 var InfoCircleOutlined2 = function InfoCircleOutlined3(props, ref) {
-  return /* @__PURE__ */ React7.createElement(AntdIcon_default, _extends({}, props, {
+  return /* @__PURE__ */ React6.createElement(AntdIcon_default, _extends({}, props, {
     ref,
     icon: InfoCircleOutlined_default
   }));
@@ -62217,34 +62920,59 @@ var InfoCircleOutlined2 = function InfoCircleOutlined3(props, ref) {
 if (true) {
   InfoCircleOutlined2.displayName = "InfoCircleOutlined";
 }
-var InfoCircleOutlined_default2 = /* @__PURE__ */ React7.forwardRef(InfoCircleOutlined2);
+var InfoCircleOutlined_default2 = /* @__PURE__ */ React6.forwardRef(InfoCircleOutlined2);
 
-// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/PlusOutlined.js
-var React8 = __toESM(require_react());
+// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/PicLeftOutlined.js
+var React7 = __toESM(require_react());
 
-// node_modules/.pnpm/@ant-design+icons-svg@4.3.1/node_modules/@ant-design/icons-svg/es/asn/PlusOutlined.js
-var PlusOutlined = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8z" } }, { "tag": "path", "attrs": { "d": "M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8z" } }] }, "name": "plus", "theme": "outlined" };
-var PlusOutlined_default = PlusOutlined;
+// node_modules/.pnpm/@ant-design+icons-svg@4.3.1/node_modules/@ant-design/icons-svg/es/asn/PicLeftOutlined.js
+var PicLeftOutlined = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M952 792H72c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h880c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0-632H72c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h880c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM608 660c8.8 0 16-7.2 16-16V380c0-8.8-7.2-16-16-16H96c-8.8 0-16 7.2-16 16v264c0 8.8 7.2 16 16 16h512zM152 436h400v152H152V436zm552 210c0 4.4 3.6 8 8 8h224c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H712c-4.4 0-8 3.6-8 8v56zm8-204h224c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H712c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8z" } }] }, "name": "pic-left", "theme": "outlined" };
+var PicLeftOutlined_default = PicLeftOutlined;
 
-// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/PlusOutlined.js
-var PlusOutlined2 = function PlusOutlined3(props, ref) {
-  return /* @__PURE__ */ React8.createElement(AntdIcon_default, _extends({}, props, {
+// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/PicLeftOutlined.js
+var PicLeftOutlined2 = function PicLeftOutlined3(props, ref) {
+  return /* @__PURE__ */ React7.createElement(AntdIcon_default, _extends({}, props, {
     ref,
-    icon: PlusOutlined_default
+    icon: PicLeftOutlined_default
   }));
 };
 if (true) {
-  PlusOutlined2.displayName = "PlusOutlined";
+  PicLeftOutlined2.displayName = "PicLeftOutlined";
 }
-var PlusOutlined_default2 = /* @__PURE__ */ React8.forwardRef(PlusOutlined2);
+var PicLeftOutlined_default2 = /* @__PURE__ */ React7.forwardRef(PicLeftOutlined2);
+
+// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/UnorderedListOutlined.js
+var React8 = __toESM(require_react());
+
+// node_modules/.pnpm/@ant-design+icons-svg@4.3.1/node_modules/@ant-design/icons-svg/es/asn/UnorderedListOutlined.js
+var UnorderedListOutlined = { "icon": { "tag": "svg", "attrs": { "viewBox": "64 64 896 896", "focusable": "false" }, "children": [{ "tag": "path", "attrs": { "d": "M912 192H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 284H328c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h584c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM104 228a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0zm0 284a56 56 0 10112 0 56 56 0 10-112 0z" } }] }, "name": "unordered-list", "theme": "outlined" };
+var UnorderedListOutlined_default = UnorderedListOutlined;
+
+// node_modules/.pnpm/@ant-design+icons@5.2.5_react-dom@18.2.0_react@18.2.0/node_modules/@ant-design/icons/es/icons/UnorderedListOutlined.js
+var UnorderedListOutlined2 = function UnorderedListOutlined3(props, ref) {
+  return /* @__PURE__ */ React8.createElement(AntdIcon_default, _extends({}, props, {
+    ref,
+    icon: UnorderedListOutlined_default
+  }));
+};
+if (true) {
+  UnorderedListOutlined2.displayName = "UnorderedListOutlined";
+}
+var UnorderedListOutlined_default2 = /* @__PURE__ */ React8.forwardRef(UnorderedListOutlined2);
 
 // src/Feed.tsx
-var import_react17 = __toESM(require_react(), 1);
-var import_date_fns2 = __toESM(require_date_fns(), 1);
+var import_react19 = __toESM(require_react(), 1);
 var import_react_router_dom2 = __toESM(require_react_router_dom(), 1);
-var import_react_query3 = __toESM(require_react_query(), 1);
-var import_veramo_react5 = __toESM(require_veramo_react(), 1);
+var import_react_query5 = __toESM(require_react_query(), 1);
+var import_veramo_react7 = __toESM(require_veramo_react(), 1);
 var import_pro_components = __toESM(require_pro_components(), 1);
+var import_antd6 = __toESM(require_antd(), 1);
+
+// src/PostForm.tsx
+var import_antd2 = __toESM(require_antd(), 1);
+var import_react15 = __toESM(require_react(), 1);
+var import_veramo_react3 = __toESM(require_veramo_react(), 1);
+var import_react_query2 = __toESM(require_react_query(), 1);
 
 // src/components/IdentifierProfile.tsx
 var import_antd = __toESM(require_antd(), 1);
@@ -62322,98 +63050,6 @@ var IdentifierProfile = ({
   ] });
 };
 var IdentifierProfile_default = IdentifierProfile;
-
-// src/components/CredentialActionsDropdown.tsx
-var import_antd2 = __toESM(require_antd(), 1);
-var import_veramo_react2 = __toESM(require_veramo_react(), 1);
-var import_react_router_dom = __toESM(require_react_router_dom(), 1);
-var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
-var CredentialActionsDropdown = ({ children, credential }) => {
-  const { agents, getAgent } = (0, import_veramo_react2.useVeramo)();
-  const navigate = (0, import_react_router_dom.useNavigate)();
-  const { notification } = import_antd2.App.useApp();
-  const agentsToCopyTo = agents.filter(
-    (agent) => agent.availableMethods().includes("dataStoreSaveVerifiableCredential")
-  );
-  const handleCopyTo = async (agentId) => {
-    const agent = getAgent(agentId);
-    try {
-      await agent.dataStoreSaveVerifiableCredential({
-        verifiableCredential: credential
-      });
-      notification.success({
-        message: "Credential copied to: " + agent.context.name
-      });
-    } catch (e) {
-      notification.error({
-        message: "Error copying credential to: " + agent.context.name,
-        description: e.message
-      });
-    }
-  };
-  const handleDownload = () => {
-    const element = document.createElement("a");
-    const file = new Blob([JSON.stringify(credential, null, 2)], {
-      type: "text/plain"
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = "verifiable-credential.json";
-    document.body.appendChild(element);
-    element.click();
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
-    import_antd2.Dropdown,
-    {
-      menu: {
-        items: [
-          {
-            key: "issuer",
-            label: "Issuer",
-            icon: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(InfoCircleOutlined_default2, {}),
-            onClick: () => navigate("/contacts/" + getIssuerDID(credential))
-          },
-          {
-            key: "subject",
-            label: "Subject",
-            icon: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(InfoCircleOutlined_default2, {}),
-            onClick: () => navigate(
-              "/contacts/" + encodeURIComponent(credential.credentialSubject.id)
-            )
-          },
-          {
-            key: "download",
-            label: "Download",
-            icon: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(DownloadOutlined_default2, {}),
-            onClick: handleDownload
-          },
-          {
-            key: "copy",
-            label: "Copy to",
-            type: "group",
-            children: agentsToCopyTo.map((_agent, index2) => {
-              return {
-                key: index2,
-                onClick: () => handleCopyTo(_agent.context?.id),
-                label: _agent.context?.name
-              };
-            })
-          }
-        ]
-      },
-      children
-    }
-  );
-};
-var CredentialActionsDropdown_default = CredentialActionsDropdown;
-
-// src/Feed.tsx
-var import_antd4 = __toESM(require_antd(), 1);
-
-// src/PostForm.tsx
-var import_antd3 = __toESM(require_antd(), 1);
-var import_react15 = __toESM(require_react(), 1);
-var import_veramo_react4 = __toESM(require_veramo_react(), 1);
-var import_react_query2 = __toESM(require_react_query(), 1);
 
 // src/MarkDown.tsx
 var ReactDOMServer = __toESM(require_server(), 1);
@@ -62495,7 +63131,7 @@ function markdownPlugin(md) {
 // src/MarkDown.tsx
 var import_react3 = __toESM(require_react(), 1);
 var import_react_components2 = __toESM(require_react_components(), 1);
-var import_veramo_react3 = __toESM(require_veramo_react(), 1);
+var import_veramo_react2 = __toESM(require_veramo_react(), 1);
 
 // node_modules/.pnpm/uint8arrays@4.0.6/node_modules/uint8arrays/dist/src/util/as-uint8array.js
 function asUint8Array(buf) {
@@ -67479,16 +68115,16 @@ var VC_JWT_ERROR = {
 // src/components/CredentialVerificationView.tsx
 var import_react_components = __toESM(require_react_components(), 1);
 var import_date_fns = __toESM(require_date_fns(), 1);
-var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime2 = __toESM(require_jsx_runtime(), 1);
 var CredentialVerificationView = ({ verifyResult, credential }) => {
-  return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { children: [
-    verifyResult.error && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("p", { children: [
+  return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { children: [
+    verifyResult.error && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("p", { children: [
       "Error: ",
       verifyResult.error.message
     ] }),
-    !verifyResult.error && verifyResult.verified && credential && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react_components.VerifiableCredential, { credential }),
-    verifyResult.verified && credential && /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", { className: "veramo__verification_result_footer", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(
+    !verifyResult.error && verifyResult.verified && credential && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react_components.VerifiableCredential, { credential }),
+    verifyResult.verified && credential && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "veramo__verification_result_footer", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(
         "svg",
         {
           className: "veramo__verified_icon",
@@ -67496,11 +68132,11 @@ var CredentialVerificationView = ({ verifyResult, credential }) => {
           width: "12",
           height: "12",
           viewBox: "0 0 1200 1200",
-          children: /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { d: "M600,1200a604.428,604.428,0,0,1-120.921-12.19,596.709,596.709,0,0,1-214.545-90.281A601.752,601.752,0,0,1,47.151,833.547,596.971,596.971,0,0,1,12.19,720.921a605.85,605.85,0,0,1,0-241.842A596.709,596.709,0,0,1,102.47,264.534,601.751,601.751,0,0,1,366.453,47.151,596.971,596.971,0,0,1,479.079,12.19a605.85,605.85,0,0,1,241.842,0A596.709,596.709,0,0,1,935.466,102.47a601.751,601.751,0,0,1,217.383,263.982,596.976,596.976,0,0,1,34.961,112.626,605.849,605.849,0,0,1,0,241.842,596.709,596.709,0,0,1-90.281,214.545,601.751,601.751,0,0,1-263.982,217.383,596.976,596.976,0,0,1-112.626,34.961A604.428,604.428,0,0,1,600,1200ZM233.818,499.972l340.917,545.086L967.272,283.377,574.734,684.509Z", fill: "#73c394" })
+          children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M600,1200a604.428,604.428,0,0,1-120.921-12.19,596.709,596.709,0,0,1-214.545-90.281A601.752,601.752,0,0,1,47.151,833.547,596.971,596.971,0,0,1,12.19,720.921a605.85,605.85,0,0,1,0-241.842A596.709,596.709,0,0,1,102.47,264.534,601.751,601.751,0,0,1,366.453,47.151,596.971,596.971,0,0,1,479.079,12.19a605.85,605.85,0,0,1,241.842,0A596.709,596.709,0,0,1,935.466,102.47a601.751,601.751,0,0,1,217.383,263.982,596.976,596.976,0,0,1,34.961,112.626,605.849,605.849,0,0,1,0,241.842,596.709,596.709,0,0,1-90.281,214.545,601.751,601.751,0,0,1-263.982,217.383,596.976,596.976,0,0,1-112.626,34.961A604.428,604.428,0,0,1,600,1200ZM233.818,499.972l340.917,545.086L967.272,283.377,574.734,684.509Z", fill: "#73c394" })
         }
       ),
       shortId(getIssuerDID(credential)),
-      /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("span", { children: "\u30FB" }),
+      /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { children: "\u30FB" }),
       (0, import_date_fns.formatRelative)(
         new Date(credential.issuanceDate),
         /* @__PURE__ */ new Date()
@@ -67510,10 +68146,10 @@ var CredentialVerificationView = ({ verifyResult, credential }) => {
 };
 
 // src/MarkDown.tsx
-var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime3 = __toESM(require_jsx_runtime(), 1);
 var MarkDown = ({ content }) => {
   const [html, setHtml] = (0, import_react3.useState)("");
-  const { agent } = (0, import_veramo_react3.useVeramo)();
+  const { agent } = (0, import_veramo_react2.useVeramo)();
   const md = new import_markdown_it.default({
     html: true,
     highlight: function(str2, lang) {
@@ -67547,7 +68183,7 @@ var MarkDown = ({ content }) => {
           const verifyResult = await agent?.verifyCredential({ credential, fetchRemoteContexts: true });
           if (verifyResult) {
             result = ReactDOMServer.renderToStaticMarkup(
-              /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(CredentialVerificationView, { verifyResult, credential })
+              /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(CredentialVerificationView, { verifyResult, credential })
             );
           }
         }
@@ -67574,7 +68210,7 @@ var MarkDown = ({ content }) => {
     }
     replaceDivs(htmlStr).then(setHtml);
   }, [content]);
-  return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { dangerouslySetInnerHTML: { __html: html } });
+  return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { dangerouslySetInnerHTML: { __html: html } });
 };
 
 // node_modules/.pnpm/@monaco-editor+loader@1.3.3_monaco-editor@0.43.0/node_modules/@monaco-editor/loader/lib/es/_virtual/_rollupPluginBabelHelpers.js
@@ -68274,12 +68910,12 @@ var Fe = dt;
 
 // src/PostForm.tsx
 var import_uuid = __toESM(require_uuid(), 1);
-var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
-var { TextArea } = import_antd3.Input;
+var import_jsx_runtime4 = __toESM(require_jsx_runtime(), 1);
+var { TextArea } = import_antd2.Input;
 var PostForm = ({ onOk }) => {
-  const token = import_antd3.theme.useToken();
+  const token = import_antd2.theme.useToken();
   const [articleBody, setArticleBody] = (0, import_react15.useState)("");
-  const { agent } = (0, import_veramo_react4.useVeramo)();
+  const { agent } = (0, import_veramo_react3.useVeramo)();
   const [selectedDid, setSelectedDid] = (0, import_react15.useState)("");
   const [issuerProfile, setIssuerProfile] = (0, import_react15.useState)();
   const [managedIdentifiers, setManagedIdentifiers] = (0, import_react15.useState)([]);
@@ -68345,15 +68981,15 @@ var PostForm = ({ onOk }) => {
       console.error(e);
     }
   };
-  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_antd3.Space, { direction: "vertical", style: { width: "100%" }, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-      import_antd3.Tabs,
+  return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_antd2.Space, { direction: "vertical", style: { width: "100%" }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+      import_antd2.Tabs,
       {
         items: [
           {
             key: "1",
             label: "Write",
-            children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
               Fe,
               {
                 theme: token.theme.id === 4 ? "vs-dark" : "light",
@@ -68375,18 +69011,18 @@ var PostForm = ({ onOk }) => {
           {
             key: "2",
             label: "Preview",
-            children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(MarkDown, { content: articleBody })
+            children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(MarkDown, { content: articleBody })
           }
         ]
       }
     ),
-    managedIdentifiersWithProfiles.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
-      import_antd3.Dropdown.Button,
+    managedIdentifiersWithProfiles.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+      import_antd2.Dropdown.Button,
       {
         type: "primary",
         onClick: handleCreatePost,
         disabled: articleBody === "",
-        icon: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Avatar, { size: "small", src: issuerProfile?.picture }),
+        icon: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_antd2.Avatar, { size: "small", src: issuerProfile?.picture }),
         menu: {
           items: [
             ...managedIdentifiersWithProfiles.map((profile) => {
@@ -68396,7 +69032,7 @@ var PostForm = ({ onOk }) => {
                   setIssuerProfile(profile);
                   setSelectedDid(profile.did);
                 },
-                label: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(IdentifierProfile_default, { did: profile.did })
+                label: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(IdentifierProfile_default, { did: profile.did })
               };
             })
           ],
@@ -68409,99 +69045,112 @@ var PostForm = ({ onOk }) => {
   ] });
 };
 
-// src/Feed.tsx
-var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
-var Feed = () => {
-  const { notification } = import_antd4.App.useApp();
-  const [drawerOpen, setDrawerOpen] = (0, import_react17.useState)(false);
-  const navigate = (0, import_react_router_dom2.useNavigate)();
-  const { agent } = (0, import_veramo_react5.useVeramo)();
-  const { data: credentials, isLoading, refetch } = (0, import_react_query3.useQuery)(
-    ["social-feed", { agentId: agent?.context.name }],
-    () => agent?.dataStoreORMGetVerifiableCredentials({
-      where: [{ column: "type", value: ["VerifiableCredential,VerifiableSocialPosting"] }],
-      order: [{ column: "issuanceDate", direction: "DESC" }]
-    })
-  );
-  const handleNewPost = async (hash2) => {
-    notification.success({
-      message: "Post created"
-    });
-    await refetch();
-    navigate("/social-feed/" + hash2);
-  };
-  return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(
-    import_pro_components.PageContainer,
+// src/ComposeSocialPostingForm.tsx
+var import_react17 = __toESM(require_react(), 1);
+var import_antd3 = __toESM(require_antd(), 1);
+var import_veramo_react4 = __toESM(require_veramo_react(), 1);
+var import_react_query3 = __toESM(require_react_query(), 1);
+var import_jsx_runtime5 = __toESM(require_jsx_runtime(), 1);
+var { Option } = import_antd3.Select;
+var ComposeSocialPostingForm = ({
+  onNewSocialPosting
+}) => {
+  const { agent } = (0, import_veramo_react4.useVeramo)();
+  const { token } = import_antd3.theme.useToken();
+  const [form] = import_antd3.Form.useForm();
+  const issuer = import_antd3.Form.useWatch("issuer", { form, preserve: true });
+  const subject = import_antd3.Form.useWatch("subject", { form, preserve: true });
+  const [issuerProfile, setIssuerProfile] = (0, import_react17.useState)();
+  const [managedIdentifiers, setManagedIdentifiers] = (0, import_react17.useState)([]);
+  const [
+    managedIdentifiersWithProfiles,
+    setManagedIdentifiersWithProfiles
+  ] = (0, import_react17.useState)([]);
+  (0, import_react_query3.useQuery)(
+    ["identifiers", { id: agent?.context.id }],
+    () => agent?.didManagerFind(),
     {
-      extra: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          import_antd4.Button,
-          {
-            icon: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(PlusOutlined_default2, {}),
-            type: "primary",
-            title: "Compose new post",
-            onClick: () => setDrawerOpen(true),
-            children: "Compose"
-          },
-          "add"
-        )
-      ],
+      onSuccess: (data) => {
+        if (data) {
+          setManagedIdentifiers(data);
+          form.setFieldValue("issuer", data[0].did);
+        }
+      }
+    }
+  );
+  (0, import_react17.useEffect)(() => {
+    if (agent) {
+      Promise.all(
+        managedIdentifiers.map((identifier) => {
+          return agent.getIdentifierProfile({ did: identifier.did });
+        })
+      ).then((profiles) => {
+        setIssuerProfile(profiles[0]);
+        setManagedIdentifiersWithProfiles(profiles);
+      }).catch(console.log);
+    }
+  }, [managedIdentifiers, agent]);
+  const handleOk = () => {
+    form.validateFields().then((values) => {
+      form.resetFields();
+      onNewSocialPosting(values);
+    }).catch((info) => {
+      console.log("Validate Failed:", info);
+    });
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+    import_antd3.Form,
+    {
+      form,
+      layout: "inline",
+      name: "form_in_form",
+      initialValues: {},
+      style: {
+        width: "100%",
+        paddingBottom: token.paddingContentVertical,
+        marginLeft: 0,
+        marginRight: token.paddingSM
+      },
       children: [
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          import_pro_components.ProList,
+        managedIdentifiersWithProfiles.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          import_antd3.Dropdown,
           {
-            ghost: true,
-            loading: isLoading,
-            pagination: {
-              defaultPageSize: 5,
-              showSizeChanger: true
+            menu: {
+              items: [
+                ...managedIdentifiersWithProfiles.map((profile) => {
+                  return {
+                    key: profile.did,
+                    onClick: () => {
+                      setIssuerProfile(profile);
+                      form.setFieldValue("issuer", profile.did);
+                    },
+                    label: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(IdentifierProfile_default, { did: profile.did })
+                  };
+                })
+              ],
+              selectable: true,
+              defaultSelectedKeys: [issuer]
             },
-            grid: { column: 1, lg: 1, xxl: 1, xl: 1 },
-            onItem: (record) => {
-              return {
-                onClick: () => {
-                  navigate("/social-feed/" + record.hash);
-                }
-              };
-            },
-            metas: {
-              title: {},
-              content: {},
-              actions: {
-                cardActionProps: "extra"
-              }
-            },
-            dataSource: credentials?.map((item) => {
-              return {
-                title: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-                  IdentifierProfile_default,
-                  {
-                    did: getIssuerDID(item.verifiableCredential)
-                  }
-                ),
-                actions: [
-                  /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("div", { children: (0, import_date_fns2.formatRelative)(
-                    new Date(item.verifiableCredential.issuanceDate),
-                    /* @__PURE__ */ new Date()
-                  ) }),
-                  /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(CredentialActionsDropdown_default, { credential: item.verifiableCredential, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(EllipsisOutlined_default2, {}) })
-                ],
-                content: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(MarkDown, { content: item.verifiableCredential.credentialSubject.articleBody }),
-                hash: item.hash
-              };
-            })
+            children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Button, { style: { height: "auto", border: 0 }, type: "text", children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Avatar, { size: "large", src: issuerProfile?.picture }) })
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
-          import_antd4.Drawer,
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Form.Item, { name: "issuer", hidden: true, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Input, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Form.Item, { name: "articleBody", style: { display: "flex", flexGrow: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          import_antd3.Input.TextArea,
           {
-            title: "Compose new post",
-            placement: "right",
-            onClose: () => setDrawerOpen(false),
-            open: drawerOpen,
-            width: 800,
-            destroyOnClose: true,
-            children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(PostForm, { onOk: handleNewPost })
+            rows: 1,
+            placeholder: "What is happening?!",
+            bordered: false,
+            style: { minWidth: "300px" },
+            autoSize: { minRows: 1, maxRows: 6 }
+          }
+        ) }),
+        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Form.Item, { children: managedIdentifiersWithProfiles.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+          import_antd3.Button,
+          {
+            type: "primary",
+            onClick: handleOk,
+            children: "Post"
           }
         ) })
       ]
@@ -68509,49 +69158,376 @@ var Feed = () => {
   );
 };
 
+// src/Feed.tsx
+var import_uuid2 = __toESM(require_uuid(), 1);
+
+// src/SocialPosting.tsx
+var import_antd5 = __toESM(require_antd(), 1);
+var import_veramo_react6 = __toESM(require_veramo_react(), 1);
+var import_react_query4 = __toESM(require_react_query(), 1);
+
+// src/components/CredentialActionsDropdown.tsx
+var import_antd4 = __toESM(require_antd(), 1);
+var import_veramo_react5 = __toESM(require_veramo_react(), 1);
+var import_react_router_dom = __toESM(require_react_router_dom(), 1);
+var import_jsx_runtime6 = __toESM(require_jsx_runtime(), 1);
+var CredentialActionsDropdown = ({ children, credential }) => {
+  const { agents, getAgent } = (0, import_veramo_react5.useVeramo)();
+  const navigate = (0, import_react_router_dom.useNavigate)();
+  const { notification } = import_antd4.App.useApp();
+  const agentsToCopyTo = agents.filter(
+    (agent) => agent.availableMethods().includes("dataStoreSaveVerifiableCredential")
+  );
+  const handleCopyTo = async (agentId) => {
+    const agent = getAgent(agentId);
+    try {
+      await agent.dataStoreSaveVerifiableCredential({
+        verifiableCredential: credential
+      });
+      notification.success({
+        message: "Credential copied to: " + agent.context.name
+      });
+    } catch (e) {
+      notification.error({
+        message: "Error copying credential to: " + agent.context.name,
+        description: e.message
+      });
+    }
+  };
+  const handleCopyEmbed = () => {
+    let embed = "";
+    if (credential.proof?.jwt) {
+      embed = `\`\`\`vc+jwt
+${credential.proof.jwt}
+\`\`\``;
+    } else {
+      embed = `\`\`\`vc+json
+${JSON.stringify(credential, null, 2)}
+\`\`\``;
+    }
+    navigator.clipboard.writeText(embed);
+    notification.success({
+      message: "Credential embed copied to clipboard"
+    });
+  };
+  const handleDownload = () => {
+    const element = document.createElement("a");
+    const file = new Blob([JSON.stringify(credential, null, 2)], {
+      type: "text/plain"
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = "verifiable-credential.json";
+    document.body.appendChild(element);
+    element.click();
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(
+    import_antd4.Dropdown,
+    {
+      menu: {
+        items: [
+          {
+            key: "issuer",
+            label: "Issuer",
+            icon: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(InfoCircleOutlined_default2, {}),
+            onClick: () => navigate("/contacts/" + getIssuerDID(credential))
+          },
+          {
+            key: "subject",
+            label: "Subject",
+            icon: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(InfoCircleOutlined_default2, {}),
+            onClick: () => navigate(
+              "/contacts/" + encodeURIComponent(credential.credentialSubject.id)
+            )
+          },
+          {
+            key: "download",
+            label: "Download",
+            icon: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(DownloadOutlined_default2, {}),
+            onClick: handleDownload
+          },
+          {
+            key: "embed",
+            label: "Copy embed",
+            icon: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(PicLeftOutlined_default2, {}),
+            onClick: handleCopyEmbed
+          },
+          {
+            key: "copy",
+            label: "Copy to",
+            type: "group",
+            children: agentsToCopyTo.map((_agent, index2) => {
+              return {
+                key: index2,
+                onClick: () => handleCopyTo(_agent.context?.id),
+                label: _agent.context?.name
+              };
+            })
+          }
+        ]
+      },
+      children
+    }
+  );
+};
+var CredentialActionsDropdown_default = CredentialActionsDropdown;
+
+// src/components/timer.tsx
+var import_date_fns2 = __toESM(require_date_fns(), 1);
+var import_react18 = __toESM(require_react(), 1);
+var import_lodash2 = __toESM(require_lodash2(), 1);
+var useTimer = ({
+  endDate,
+  onTimerEnd,
+  latestDate: _latestDate,
+  formatDurationOptions
+}) => {
+  const [latestDate, setLatestDate] = (0, import_react18.useState)(_latestDate || /* @__PURE__ */ new Date());
+  const isEnded = (0, import_date_fns2.isBefore)(endDate, latestDate);
+  const formatDistanceLocale = {
+    lessThanXSeconds: "{{count}}s",
+    xSeconds: "{{count}}s",
+    halfAMinute: "30s",
+    lessThanXMinutes: "{{count}}m",
+    xMinutes: "{{count}}m",
+    aboutXHours: "{{count}}h",
+    xHours: "{{count}}h",
+    xDays: "{{count}}d",
+    aboutXWeeks: "{{count}}w",
+    xWeeks: "{{count}}w",
+    aboutXMonths: "{{count}}m",
+    xMonths: "{{count}}m",
+    aboutXYears: "{{count}}y",
+    xYears: "{{count}}y",
+    overXYears: "{{count}}y",
+    almostXYears: "{{count}}y"
+  };
+  const formatDistanceShortenLocale = (token, count) => {
+    return formatDistanceLocale[token].replace("{{count}}", count);
+  };
+  (0, import_react18.useEffect)(() => {
+    let interval;
+    interval = setInterval(() => {
+      if (isEnded) {
+        clearInterval(interval);
+        onTimerEnd && onTimerEnd();
+        return;
+      }
+      setLatestDate(/* @__PURE__ */ new Date());
+    }, 1e3);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isEnded, onTimerEnd]);
+  const duration = (0, import_react18.useMemo)(() => {
+    return (0, import_date_fns2.intervalToDuration)({
+      start: latestDate,
+      end: endDate
+    });
+  }, [latestDate, endDate]);
+  const defaultFormatDurationOptions = {
+    format: ["years", "days", "hours", "minutes"],
+    locale: {
+      formatDistance: formatDistanceShortenLocale
+    }
+  };
+  const mergedFormatDurationOptions = (0, import_lodash2.default)(
+    defaultFormatDurationOptions,
+    formatDurationOptions
+  );
+  const formattedDuration = (0, import_date_fns2.formatDuration)(
+    duration,
+    mergedFormatDurationOptions
+  );
+  return [formattedDuration];
+};
+
+// src/SocialPosting.tsx
+var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
+var SocialPosting = ({
+  credential
+}) => {
+  const { agent } = (0, import_veramo_react6.useVeramo)();
+  const { token } = import_antd5.theme.useToken();
+  const [formattedDuration] = useTimer({
+    endDate: new Date(credential.verifiableCredential.issuanceDate)
+  });
+  const did = getIssuerDID(credential.verifiableCredential);
+  const { data, isLoading } = (0, import_react_query4.useQuery)(
+    ["identifierProfile", did, agent?.context.id],
+    () => did ? agent?.getIdentifierProfile({ did }) : void 0
+  );
+  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_jsx_runtime7.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Row, { align: "top", wrap: false, style: {
+    width: "100%",
+    borderTop: "1px solid " + token.colorBorderSecondary,
+    padding: token.paddingSM,
+    position: "relative"
+  }, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("div", { style: { position: "absolute", top: 0, right: 0 }, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(CredentialActionsDropdown_default, { credential: credential.verifiableCredential, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(EllipsisOutlined_default2, {}) }) }),
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Col, { style: { marginRight: token.padding }, children: [
+      !isLoading && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Avatar, { src: data?.picture, size: "large" }),
+      isLoading && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Skeleton.Avatar, { active: true })
+    ] }),
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Col, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { style: { justifyItems: "flex-start", display: "flex" }, children: [
+        !isLoading && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Popover, { content: shortId(did), children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Space, { direction: "horizontal", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, { ellipsis: true, children: data?.name }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+            "svg",
+            {
+              className: "veramo__verified_icon",
+              xmlns: "http://www.w3.org/2000/svg",
+              width: "12",
+              height: "12",
+              viewBox: "0 0 1200 1200",
+              children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("path", { d: "M600,1200a604.428,604.428,0,0,1-120.921-12.19,596.709,596.709,0,0,1-214.545-90.281A601.752,601.752,0,0,1,47.151,833.547,596.971,596.971,0,0,1,12.19,720.921a605.85,605.85,0,0,1,0-241.842A596.709,596.709,0,0,1,102.47,264.534,601.751,601.751,0,0,1,366.453,47.151,596.971,596.971,0,0,1,479.079,12.19a605.85,605.85,0,0,1,241.842,0A596.709,596.709,0,0,1,935.466,102.47a601.751,601.751,0,0,1,217.383,263.982,596.976,596.976,0,0,1,34.961,112.626,605.849,605.849,0,0,1,0,241.842,596.709,596.709,0,0,1-90.281,214.545,601.751,601.751,0,0,1-263.982,217.383,596.976,596.976,0,0,1-112.626,34.961A604.428,604.428,0,0,1,600,1200ZM233.818,499.972l340.917,545.086L967.272,283.377,574.734,684.509Z", fill: "#73c394" })
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, { type: "secondary", children: "\xB7" }),
+          /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, { type: "secondary", children: formattedDuration })
+        ] }) }),
+        isLoading && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Skeleton.Input, { style: { width: 100 }, active: true })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(MarkDown, { content: credential.verifiableCredential.credentialSubject.articleBody })
+    ] })
+  ] }) });
+};
+
+// src/Feed.tsx
+var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
+var Feed = () => {
+  const { notification } = import_antd6.App.useApp();
+  const [drawerOpen, setDrawerOpen] = (0, import_react19.useState)(false);
+  const navigate = (0, import_react_router_dom2.useNavigate)();
+  const { agent } = (0, import_veramo_react7.useVeramo)();
+  const { data: credentials, isLoading, refetch } = (0, import_react_query5.useQuery)(
+    ["social-feed", { agentId: agent?.context.name }],
+    () => agent?.dataStoreORMGetVerifiableCredentials({
+      where: [{ column: "type", value: ["VerifiableCredential,VerifiableSocialPosting"] }],
+      order: [{ column: "issuanceDate", direction: "DESC" }]
+    })
+  );
+  const handleNewSocialPosting = async (values) => {
+    const issuerProfile = await agent?.getIdentifierProfile({ did: values.issuer });
+    const credentialId = import_uuid2.default.v4();
+    const credential = await agent?.createVerifiableCredential({
+      save: true,
+      proofFormat: "jwt",
+      credential: {
+        "@context": ["https://www.w3.org/2018/credentials/v1"],
+        type: ["VerifiableCredential", "VerifiableSocialPosting"],
+        issuer: { id: values.issuer },
+        issuanceDate: (/* @__PURE__ */ new Date()).toISOString(),
+        credentialSubject: {
+          id: credentialId,
+          type: "SocialMediaPosting",
+          author: {
+            id: values.issuer,
+            image: issuerProfile?.picture,
+            name: issuerProfile?.name
+          },
+          headline: "",
+          articleBody: values.articleBody
+        }
+      }
+    });
+    if (credential) {
+      await agent?.dataStoreSaveVerifiableCredential({ verifiableCredential: credential });
+      notification.success({
+        message: "Kudos sent"
+      });
+      refetch();
+    }
+  };
+  const handleNewPost = async (hash2) => {
+    notification.success({
+      message: "Post created"
+    });
+    await refetch();
+    navigate("/social-feed/" + hash2);
+  };
+  return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_pro_components.PageContainer, { children: [
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      ComposeSocialPostingForm,
+      {
+        onNewSocialPosting: handleNewSocialPosting
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      import_antd6.List,
+      {
+        itemLayout: "vertical",
+        size: "large",
+        pagination: {
+          pageSize: 30
+        },
+        dataSource: credentials,
+        renderItem: (item) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+          SocialPosting,
+          {
+            credential: item
+          },
+          item.hash
+        )
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(
+      import_antd6.Drawer,
+      {
+        title: "Compose new post",
+        placement: "right",
+        onClose: () => setDrawerOpen(false),
+        open: drawerOpen,
+        width: 800,
+        destroyOnClose: true,
+        children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PostForm, { onOk: handleNewPost })
+      }
+    )
+  ] });
+};
+
 // src/Post.tsx
 var import_react_router_dom3 = __toESM(require_react_router_dom(), 1);
-var import_react_query4 = __toESM(require_react_query(), 1);
-var import_veramo_react6 = __toESM(require_veramo_react(), 1);
+var import_react_query6 = __toESM(require_react_query(), 1);
+var import_veramo_react8 = __toESM(require_veramo_react(), 1);
 var import_pro_components2 = __toESM(require_pro_components(), 1);
-var import_antd5 = __toESM(require_antd(), 1);
+var import_antd7 = __toESM(require_antd(), 1);
 var import_date_fns3 = __toESM(require_date_fns(), 1);
-var import_jsx_runtime7 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime9 = __toESM(require_jsx_runtime(), 1);
 var Post = () => {
   const { id } = (0, import_react_router_dom3.useParams)();
-  const { agent } = (0, import_veramo_react6.useVeramo)();
+  const { agent } = (0, import_veramo_react8.useVeramo)();
   if (!id)
     return null;
-  const { data: credential, isLoading: credentialLoading } = (0, import_react_query4.useQuery)(
+  const { data: credential, isLoading: credentialLoading } = (0, import_react_query6.useQuery)(
     ["credential", { id }],
     () => agent?.dataStoreGetVerifiableCredential({ hash: id })
   );
   if (!credential)
     return null;
-  return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+  return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
     import_pro_components2.PageContainer,
     {
       loading: credentialLoading,
-      title: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      title: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
         IdentifierProfile_default,
         {
           did: getIssuerDID(credential)
         }
       ),
       extra: [
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, { children: credential && (0, import_date_fns3.formatRelative)(
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd7.Typography.Text, { children: credential && (0, import_date_fns3.formatRelative)(
           new Date(credential.issuanceDate),
           /* @__PURE__ */ new Date()
         ) }, "1"),
-        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(CredentialActionsDropdown_default, { credential, children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(EllipsisOutlined_default2, {}) }, "2")
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(CredentialActionsDropdown_default, { credential, children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(EllipsisOutlined_default2, {}) }, "2")
       ],
-      children: credential && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(MarkDown, { content: credential.credentialSubject.articleBody })
+      children: credential && /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(MarkDown, { content: credential.credentialSubject.articleBody })
     }
   );
 };
 
 // src/index.tsx
-var import_jsx_runtime8 = __toESM(require_jsx_runtime(), 1);
+var import_jsx_runtime10 = __toESM(require_jsx_runtime(), 1);
 var Plugin = {
   init: () => {
     return {
@@ -68560,18 +69536,18 @@ var Plugin = {
       routes: [
         {
           path: "/social-feed",
-          element: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Feed, {})
+          element: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Feed, {})
         },
         {
           path: "/social-feed/:id",
-          element: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Post, {})
+          element: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Post, {})
         }
       ],
       menuItems: [
         {
           name: "Social Feed",
           path: "/social-feed",
-          icon: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(FileTextOutlined_default2, {})
+          icon: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(UnorderedListOutlined_default2, {})
         }
       ],
       hasCss: true

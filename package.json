@@ -1,13 +1,13 @@
 {
 	"name": "@veramo-community/agent-explorer-plugin-social-feed",
-  "repository": "git@github.com:veramolabs/agent-explorer-plugin-social-feed.git",
-  "author": "Simonas Karuzas <simonas.karuzas@mesh.xyz>",
-  "contributors": [
-    "Mircea Nistor <mircea.nistor@mesh.xyz>",
+	"repository": "git@github.com:veramolabs/agent-explorer-plugin-social-feed.git",
+	"author": "Simonas Karuzas <simonas.karuzas@mesh.xyz>",
+	"contributors": [
+		"Mircea Nistor <mircea.nistor@mesh.xyz>",
 		"Nick Reynolds <nick.reynolds@mesh.xyz>"
-  ],
-  "keywords": [],
-  "license": "Apache-2.0",
+	],
+	"keywords": [],
+	"license": "Apache-2.0",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -18,6 +18,7 @@
 	"devDependencies": {
 		"@ant-design/icons": "^5.2.5",
 		"@ant-design/pro-components": "^2.6.12",
+		"@types/lodash.merge": "^4.6.7",
 		"@types/markdown-it": "^13.0.1",
 		"@types/react": "^18.2.20",
 		"@types/react-dom": "^18.2.7",
@@ -35,6 +36,8 @@
 		"gray-matter": "^4.0.3",
 		"highlight.js": "^11.8.0",
 		"html-entities": "^2.4.0",
+		"lodash": "^4.17.21",
+		"lodash.merge": "^4.6.2",
 		"markdown-it": "^13.0.1",
 		"punycode": "^2.3.0",
 		"react": "^18.2.0",
