@@ -1,0 +1,50 @@
+{
+	"name": "@veramo-community/agent-explorer-plugin-social-feed",
+  "repository": "git@github.com:veramolabs/agent-explorer-plugin-social-feed.git",
+  "author": "Simonas Karuzas <simonas.karuzas@mesh.xyz>",
+  "contributors": [
+    "Mircea Nistor <mircea.nistor@mesh.xyz>",
+		"Nick Reynolds <nick.reynolds@mesh.xyz>"
+  ],
+  "keywords": [],
+  "license": "Apache-2.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "node build.mjs",
+		"serve": "node build.mjs --serve",
+		"ngrok": "ngrok http 8080"
+	},
+	"devDependencies": {
+		"@ant-design/icons": "^5.2.5",
+		"@ant-design/pro-components": "^2.6.12",
+		"@types/markdown-it": "^13.0.1",
+		"@types/react": "^18.2.20",
+		"@types/react-dom": "^18.2.7",
+		"@types/react-router-dom": "^5.3.3",
+		"@types/uuid": "^9.0.3",
+		"@veramo-community/react-components": "^1.5.0",
+		"@veramo-community/veramo-react": "^1.0.82",
+		"@veramo/core": "^5.4.1",
+		"@veramo/core-types": "^5.4.1",
+		"antd": "^5.8.3",
+		"date-fns": "^2.30.0",
+		"did-jwt-vc": "^3.2.7",
+		"esbuild": "^0.19.2",
+		"esbuild-plugin-external-global": "^1.0.1",
+		"gray-matter": "^4.0.3",
+		"highlight.js": "^11.8.0",
+		"html-entities": "^2.4.0",
+		"markdown-it": "^13.0.1",
+		"punycode": "^2.3.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-query": "^3.39.3",
+		"react-router-dom": "^6.15.0",
+		"typescript": "^5.1.6",
+		"uuid": "^9.0.1"
+	},
+	"dependencies": {
+		"@monaco-editor/react": "^4.5.2"
+	}
+}
