@@ -54,7 +54,7 @@ export const Feed = () => {
     if (credential) {
       await agent?.dataStoreSaveVerifiableCredential({verifiableCredential: credential})
       notification.success({
-        message: 'Kudos sent',
+        message: 'Successfully created post',
       })
       refetch()
       
