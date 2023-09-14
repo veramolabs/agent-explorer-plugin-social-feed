@@ -42,7 +42,7 @@ export const ComposeSocialPostingForm: React.FC<ComposeSocialPostingFormFormProp
     () => agent?.didManagerFind(),
     {
       onSuccess: (data: IIdentifier[]) => {
-        if (data) {
+        if (data.length > 0) {
           setManagedIdentifiers(data)
           form.setFieldValue('issuer', data[0].did);
         }
@@ -123,7 +123,7 @@ export const ComposeSocialPostingForm: React.FC<ComposeSocialPostingFormFormProp
         </Form.Item>
 
 
-        <Form.Item name="articleBody" style={{ display: 'flex', flexGrow: 1}}>
+        {managedIdentifiersWithProfiles.length > 0 && (<Form.Item name="articleBody" style={{ display: 'flex', flexGrow: 1}}>
           <Input.TextArea 
             rows={1} 
             placeholder='What is happening?!' 
@@ -131,7 +131,8 @@ export const ComposeSocialPostingForm: React.FC<ComposeSocialPostingFormFormProp
             style={{minWidth: '300px'}}
             autoSize={{ minRows: 1, maxRows: 6 }}
             />
-        </Form.Item>
+        </Form.Item>)}
+
         <Form.Item>
 
           {managedIdentifiersWithProfiles.length > 0 && (

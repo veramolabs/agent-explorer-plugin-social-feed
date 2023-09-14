@@ -69071,7 +69071,7 @@ var ComposeSocialPostingForm = ({
     () => agent?.didManagerFind(),
     {
       onSuccess: (data) => {
-        if (data) {
+        if (data.length > 0) {
           setManagedIdentifiers(data);
           form.setFieldValue("issuer", data[0].did);
         }
@@ -69135,7 +69135,7 @@ var ComposeSocialPostingForm = ({
           }
         ),
         /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Form.Item, { name: "issuer", hidden: true, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Input, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Form.Item, { name: "articleBody", style: { display: "flex", flexGrow: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+        managedIdentifiersWithProfiles.length > 0 && /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Form.Item, { name: "articleBody", style: { display: "flex", flexGrow: 1 }, children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
           import_antd3.Input.TextArea,
           {
             rows: 1,
@@ -69433,7 +69433,7 @@ var Feed = () => {
     if (credential) {
       await agent?.dataStoreSaveVerifiableCredential({ verifiableCredential: credential });
       notification.success({
-        message: "Kudos sent"
+        message: "Successfully created post"
       });
       refetch();
     }
