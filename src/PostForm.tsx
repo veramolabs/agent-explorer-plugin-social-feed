@@ -4,9 +4,7 @@ const { TextArea } = Input
 import { useVeramo } from '@veramo-community/veramo-react'
 import { ICredentialIssuer, IDIDManager, IDataStore, IIdentifier } from '@veramo/core'
 import { useQuery } from 'react-query'
-import IdentifierProfile from './components/IdentifierProfile.js'
-import { IIdentifierProfile } from './types.js'
-import { MarkDown } from './MarkDown.js'
+import { IIdentifierProfile, MarkDown, IdentifierProfile } from '@veramo-community/agent-explorer-plugin'
 import Editor from '@monaco-editor/react';
 import uuid from 'uuid';
 

@@ -3,8 +3,7 @@ import { Avatar, Button, Dropdown, Form, Input, Select, Space, theme, } from 'an
 import { useVeramo } from '@veramo-community/veramo-react'
 import { useQuery } from 'react-query'
 import { IIdentifier } from '@veramo/core'
-import { IIdentifierProfile } from './types'
-import IdentifierProfile from './components/IdentifierProfile'
+import { IdentifierProfile, IIdentifierProfile } from '@veramo-community/agent-explorer-plugin'
 
 
 const { Option } = Select

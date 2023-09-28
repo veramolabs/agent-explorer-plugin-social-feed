@@ -8,8 +8,8 @@ import { IDataStoreORM } from '@veramo/core'
 import { App, Drawer, List } from 'antd'
 import { PostForm } from './PostForm.js'
 import { ComposeSocialPostingForm, ComposeSocialPostingFormValues } from './ComposeSocialPostingForm'
+import { VerifiableCredentialComponent } from '@veramo-community/agent-explorer-plugin'
 import uuid from 'uuid';
-import { SocialPosting } from './SocialPosting'
 
 
 export const Feed = () => {
@@ -83,11 +83,10 @@ export const Feed = () => {
           pageSize: 30,
         }}
         dataSource={credentials}
-        renderItem={(item) => (
-          <SocialPosting
-            key={item.hash}
-            credential={item}
-          />
+        renderItem={(item, index) => (
+          <div style={{marginTop: '20px'}} key={index}>
+          <VerifiableCredentialComponent credential={item} />
+          </div>
         )}
       />
 
