@@ -2819,6 +2819,7 @@ var Plugin = {
     return {
       name: "Social Feed",
       description: "Decentralized reputation and social feed",
+      icon: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(UnorderedListOutlined_default2, {}),
       requiredMethods: [],
       routes: [
         {

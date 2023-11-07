@@ -15,6 +15,7 @@ const Plugin: IPlugin = {
         return {
           name: 'Social Feed',
           description: 'Decentralized reputation and social feed',
+          icon: <UnorderedListOutlined />,
           requiredMethods: [],
           routes: [
             {
